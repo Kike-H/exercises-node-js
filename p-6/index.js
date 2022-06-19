@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+const note_path = './notes.json'
+
 let Book = class {
     constructor(name_book, author) {
         this.name_book = name_book;
@@ -9,14 +11,13 @@ let Book = class {
 
 //Initialize the notes.json
 try {
-    if(!fs.existsSync('./notes.json')) {
-        fs.writeFileSync('./notes.json', '[]')
+    if(!fs.existsSync(note_path)) {
+        fs.writeFileSync(note_path, '[]')
     }
 }
 catch (err) {
     console.log(err);
 }
-
 
 //Function to read from console
 const readline = require('readline').createInterface({
@@ -41,7 +42,7 @@ async function menu () {
         switch (opt) {
             case 1:
                 console.log('\033[2J');
-                console.log(JSON.parse(fs.readFileSync('./notes.json', 'utf8')));
+                console.log(JSON.parse(fs.readFileSync(note_path, 'utf8')));
                 await question('Press any key to continue...')
                 console.log('\033[2J');
                 break;
@@ -59,11 +60,11 @@ async function menu () {
                     let book = books[b];
                     console.log(`${parseInt(b)+1}.- Name: ${book.name_book}; Author: ${book.author}`);
                 }
-                let notes = JSON.parse(fs.readFileSync('./notes.json', 'utf8'));
+                let notes = JSON.parse(fs.readFileSync(note_path, 'utf8'));
                 let index = parseInt(await question('Select book to save: '))-1;
                 notes.push(books[index]);
                 books.pop(index);
-                fs.writeFileSync('./notes.json', JSON.stringify(notes))
+                fs.writeFileSync(note_path, JSON.stringify(notes))
                 await question('Press any key to continue...')
                 console.log('\033[2J');
                 break;
