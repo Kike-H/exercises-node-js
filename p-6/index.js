@@ -28,7 +28,7 @@ const question = (str) => new Promise(resolve => readline.question(str, data => 
     resolve(data);
 }));
 
-opt = menu();
+menu();
 
 async function menu () {
     let books = [];
