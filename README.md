@@ -2,7 +2,7 @@
 
 __*Penjamo Polytechnic University*__
 
-Exersice for my class of SOA
+Exersices for my class of SOA
 
 
 > ## Requirements
