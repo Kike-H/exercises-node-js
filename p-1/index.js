@@ -1,5 +1,5 @@
 function calculate_discount(amount, percent) {
-    if(amount < 0) {
+    if(amount <= 0) {
         console.log("Invalid amount")
         return -1
     }
