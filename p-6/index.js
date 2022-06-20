@@ -2,10 +2,11 @@ const fs = require('fs');
 
 const note_path = './notes.json'
 
-let Book = class {
-    constructor(name_book, author) {
-        this.name_book = name_book;
+let Note = class {
+    constructor(title, author, description) {
+        this.title = title;
         this.author = author;
+        this.description = description;
     }
 };
 
@@ -31,39 +32,45 @@ const question = (str) => new Promise(resolve => readline.question(str, data => 
 menu();
 
 async function menu () {
-    let books = [];
     let opt = 0;
     while (opt != 4) {
-        console.log('1. Load Book'); 
-        console.log('2. Save Book'); 
-        console.log('3. Add Book');
+        let notes = JSON.parse(fs.readFileSync(note_path, 'utf8'));
+        console.log('1. Load Note'); 
+        console.log('2. Edit Note'); 
+        console.log('3. Save Note');
         console.log('4. Exit');
         opt = parseInt(await question('Select an option: '));
         switch (opt) {
             case 1:
                 console.log('\033[2J');
-                console.log(JSON.parse(fs.readFileSync(note_path, 'utf8')));
+                console.log('Load 📓 \n')
+                console.log(notes);
                 await question('Press any key to continue...')
                 console.log('\033[2J');
                 break;
             case 2:
                 console.log('\033[2J');
-                let name_book = await question("Name book: ")
-                let author = await question("Author: ")
-                books.push(new Book(name_book, author))
+                console.log('Edit 📓 \n')
+                for(n in notes) {
+                    let note = notes[n];
+                    console.log(`${parseInt(n)+1}._ ${note.title}`);
+                }
+                let index = parseInt(await question('Select note to edit: '))-1;
+                let new_title = await question("Title: ");
+                let new_author = await question("Author: ");
+                let new_description = await question("Description: ");
+                notes[index] = new Note(new_title, new_author, new_description);
+                fs.writeFileSync(note_path, JSON.stringify(notes))
                 await question('Press any key to continue...')
                 console.log('\033[2J');
                 break;
             case 3:
                 console.log('\033[2J');
-                for(b in books) {
-                    let book = books[b];
-                    console.log(`${parseInt(b)+1}.- Name: ${book.name_book}; Author: ${book.author}`);
-                }
-                let notes = JSON.parse(fs.readFileSync(note_path, 'utf8'));
-                let index = parseInt(await question('Select book to save: '))-1;
-                notes.push(books[index]);
-                books.pop(index);
+                console.log('Save 📓 \n')
+                let title = await question("Title: ");
+                let author = await question("Author: ");
+                let description = await question("Description: ");
+                notes.push(new Note(title, author, description));
                 fs.writeFileSync(note_path, JSON.stringify(notes))
                 await question('Press any key to continue...')
                 console.log('\033[2J');
